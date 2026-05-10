@@ -1,0 +1,138 @@
+alias rmd='rm -R -f'
+alias zz='exec zsh'
+alias c='clear'
+alias oc='opencode'
+alias ai='codex'
+alias al='${EDITOR:-nvim} $ZDOTDIR/.zalias'
+alias funct='${EDITOR:-nvim} $ZDOTDIR/.zfunction'
+alias plug='${EDITOR:-nvim} $ZDOTDIR/.zplugin'
+alias banner='${EDITOR:-nvim} $ZDOTDIR/.zbanner'
+alias zenv='${EDITOR:-nvim} $ZDOTDIR/.zshenv'
+alias kzsh='${EDITOR:-nvim} $ZDOTDIR/.zshrc'
+alias prompt='${EDITOR:-nvim} ~/.config/starship.toml'
+alias kit='${EDITOR:-nvim} ~/.config/kitty/kitty.conf'
+alias kitopen='${EDITOR:-nvim} ~/.config/kitty/open-actions.conf'
+alias kitlaunch='${EDITOR:-nvim} ~/.config/kitty/launch-actions.conf'
+alias kittheme='${EDITOR:-nvim} ~/.config/kitty/current-theme.conf'
+
+# Ripgrep (replaces grep)
+alias grep='rg'
+alias egrep='rg -E'
+alias fgrep='rg -F'
+
+
+# Arch Linux yay (AUR helper)
+if command -v yay &>/dev/null; then
+  alias yarem='yay -Rns'
+  alias yarep='yay -Si'
+  alias yareps='yay -Ss'
+  alias yasu='yay -Syu --noconfirm'
+  alias yaupd='yay -Sy'
+  alias yaupg='yay -Syu'
+fi
+
+# Core compose
+alias dco='docker-compose'
+alias dcup='docker-compose up'
+alias dcupd='docker-compose up -d'
+alias dcdown='docker-compose down'
+alias dcrestart='docker-compose restart'
+alias dcstop='docker-compose stop'
+alias dcstart='docker-compose start'
+alias dce='docker-compose exec'
+alias dcl='docker-compose logs'
+alias dclf='docker-compose logs -f'
+alias dclF='docker-compose logs -f --tail 0'
+alias dcps='docker-compose ps'
+alias dcpull='docker-compose pull'
+alias dcb='docker-compose build'
+
+# Build variants
+alias dcupb='docker-compose up --build'
+alias dcupdb='docker-compose up -d --build'
+
+# Containers
+alias dps='docker ps'
+alias dpsa='docker ps -a'
+alias drm='docker container rm'
+alias drm!='docker container rm -f'
+alias dstopall='docker stop $(docker ps -q)'
+alias dlogs='docker container logs'
+alias dexec='docker container exec -it'
+
+# Images
+alias dils='docker image ls'
+alias dib='docker image build'
+alias dirm='docker image rm'
+alias dipru='docker image prune -a'
+
+# Networks / Volumes
+alias dnls='docker network ls'
+alias dvls='docker volume ls'
+
+alias g='git'
+alias ga='git add'
+alias gaa='git add --all'
+alias gcmb='git checkout $(git_main_branch)'
+alias gcd='git checkout $(git_develop_branch)'
+alias gco='git checkout'
+alias gcb='git checkout -b'
+
+alias gc='git commit'
+alias gcm='git commit -m'
+alias gcam='git commit --all --message'
+alias gcmsg='git commit --message'
+alias gca!='git commit --verbose --all --amend'
+alias gc!='git commit --verbose --amend'
+
+alias gb='git branch'
+alias gba='git branch --all'
+alias gbd='git branch --delete'
+alias gbD='git branch --delete --force'
+alias gbs='git bisect'
+alias gst='git status'
+alias gss='git status --short'
+alias gsb='git status --short --branch'
+
+alias gl='git log'
+alias glo='git log --oneline --decorate'
+alias glg='git log --stat'
+alias glgp='git log --stat --patch'
+alias gd='git diff'
+alias gds='git diff --staged'
+alias gdc='git diff --cached'
+
+
+alias gf='git fetch'
+alias gfa='git fetch --all --tags --prune --jobs=10'
+alias gp='git push'
+alias gpf='git push --force-with-lease'
+alias gpl='git pull'
+alias gpr='git pull --rebase'
+
+alias gsta='git stash push'
+alias gstp='git stash pop'
+alias gstl='git stash list'
+alias gstc='git stash clear'
+
+
+alias grb='git rebase'
+alias grbi='git rebase --interactive'
+alias gm='git merge'
+alias gmff='git merge --ff-only'
+
+
+alias h='history'
+alias hs='history | grep'
+alias hsi='history | grep -i'
+alias hl='history | less'
+
+
+
+alias man='nocorrect man'
+alias sudo='nocorrect sudo'
+alias su='nocorrect su'
+
+alias which-command='?command'
+alias x='extract'
+

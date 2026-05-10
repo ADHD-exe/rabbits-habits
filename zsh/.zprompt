@@ -1,0 +1,4 @@
+#ZSH PROMPT
+eval "$(starship init zsh)"
+
+[[ -o interactive ]] && fastfetch

@@ -1,0 +1,179 @@
+# ================================================================
+# Zinit bootstrap (correct + minimal)
+# ================================================================
+ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
+
+if [[ ! -d "$ZINIT_HOME" ]]; then
+  git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
+fi
+
+source "$ZINIT_HOME/zinit.zsh"
+
+
+# ================================================================
+# Stage 0 — typing experience (latency critical)
+# ================================================================
+
+# Autosuggestions
+zinit ice wait lucid
+zinit light zsh-users/zsh-autosuggestions
+
+# History substring search
+zinit ice wait lucid
+zinit light zsh-users/zsh-history-substring-search
+
+# Required keybindings
+bindkey '^[[A' history-substring-search-up
+bindkey '^[[B' history-substring-search-down
+
+# Autosuggest config
+ZSH_AUTOSUGGEST_STRATEGY=(history completion)
+ZSH_AUTOSUGGEST_USE_ASYNC=1
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=244'
+
+
+# ================================================================
+# Stage 1 — completions (heavy, structured)
+# ================================================================
+zinit ice wait lucid blockf
+
+# Extended completions
+zinit light zsh-users/zsh-completions
+
+autoload -Uz compinit
+compinit -d "$ZDOTDIR/zcompdump/.zcompdump"
+
+
+# ================================================================
+# Stage 1.5 — completion UX enhancements
+# ================================================================
+
+# fzf-tab (hooks into completion system)
+zinit ice wait lucid
+zinit light Aloxaf/fzf-tab
+
+# Completion UX settings
+LISTMAX=25
+zic_custom_binding='^X^I'
+bindkey '^Z' complete-word
+
+
+# ================================================================
+# Stage 2 — directory navigation
+# ================================================================
+
+# zoxide (primary)
+zinit ice from"gh-r" as"program" mv"zoxide* -> zoxide" \
+           atload'eval "$(zoxide init zsh)"'
+zinit light ajeetdsouza/zoxide
+
+
+# ================================================================
+# Stage 2.5 — atuin + zsh history config
+# ================================================================
+# Flags:  --disable-ctrl-r    (use fzf's CTRL-R instead)
+#         --disable-up-arrow  (keep native up-arrow binding — omit for TUI)
+#         --disable-ai        (disable ? key for AI search)
+eval "$(atuin init zsh --disable-ctrl-r)"
+
+# Zsh history settings
+HISTFILE=$ZDOTDIR/.zhistory
+HISTSIZE=10000
+SAVEHIST=10000
+setopt appendhistory
+setopt inc_append_history
+setopt hist_ignore_all_dups
+setopt hist_ignore_space
+setopt hist_reduce_blanks
+setopt hist_save_no_dups
+setopt hist_verify
+setopt hist_expire_dups_first
+setopt share_history
+setopt hist_ignore_dups
+setopt auto_cd
+
+
+# ================================================================
+# Stage 3 — OMZ utility plugins & libs
+# ================================================================
+
+# OMZ libs
+zinit snippet OMZL::git.zsh
+zinit snippet OMZL::directories.zsh
+zinit snippet OMZL::theme-and-appearance.zsh
+zinit snippet OMZL::async_prompt.zsh
+
+# OMZ plugins
+
+zinit ice wait lucid
+
+zinit snippet OMZP::git
+zinit snippet OMZP::colored-man-pages
+zinit snippet OMZP::extract
+zinit snippet OMZP::dirhistory
+zinit snippet OMZP::man
+zinit snippet OMZP::sudo
+zinit snippet OMZP::copyfile
+zinit snippet OMZP::copybuffer
+zinit snippet OMZP::direnv
+zinit snippet OMZP::command-not-found
+
+# brew (macOS / Linuxbrew)
+if command -v brew &>/dev/null; then
+  zinit snippet OMZP::brew
+fi
+
+# eza config - must be set BEFORE loading the plugin
+zstyle ':omz:plugins:eza' 'dirs-first' yes
+zstyle ':omz:plugins:eza' 'git-status' yes
+zstyle ':omz:plugins:eza' 'header' yes
+zstyle ':omz:plugins:eza' 'icons' yes
+
+zinit snippet OMZP::eza
+
+# ================================================================
+# Stage 4 — QoL plugins
+# ================================================================
+
+zinit ice wait lucid
+zinit light hlissner/zsh-autopair
+
+# you-should-use (better than alias-tips)
+zinit ice wait lucid
+zinit light MichaelAquilina/zsh-you-should-use
+
+
+# ================================================================
+# Stage 4.5 — bat integration
+# ================================================================
+
+if command -v bat >/dev/null 2>&1; then
+  export MANPAGER="sh -c 'col -bx | bat -l man -p'"
+  alias cat='bat --paging=never'
+  alias batc='batcat'
+fi
+
+
+# ================================================================
+# Stage 5 — fzf integration (safe + official)
+# ================================================================
+if command -v fzf >/dev/null 2>&1; then
+  zinit ice wait lucid
+
+  zinit snippet https://raw.githubusercontent.com/junegunn/fzf/master/shell/key-bindings.zsh
+  zinit snippet https://raw.githubusercontent.com/junegunn/fzf/master/shell/completion.zsh
+
+  # Use CTRL-H for fzf history search instead of CTRL-R
+  bindkey -r '^R'
+  bindkey '^H' fzf-history-widget
+
+  export FZF_CTRL_R_OPTS='--preview "echo {}"'
+fi
+
+
+# ================================================================
+# Stage 6 — syntax highlighting (MUST BE LAST)
+# ================================================================
+
+zinit ice wait lucid
+zinit light zsh-users/zsh-syntax-highlighting
